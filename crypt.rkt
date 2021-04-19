@@ -31,10 +31,10 @@
 ; correct takes a solutions, 2 input letters, and a solution
 ; and verifies if then *add* up to the solution 
 (define (correct m a b s)
-  (define l->i (curry letters->integer m))
-  (let ([a-value (l->i a)]
-        [b-value (l->i b)]
-        [s-value (l->i s)])
+  (let* ([l->i (curry letters->integer m)]
+         [a-value (l->i a)]
+         [b-value (l->i b)]
+         [s-value (l->i s)])
     (= (+ a-value b-value)
        s-value)))
 
