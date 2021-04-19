@@ -22,7 +22,7 @@ This returns a (lazy) stream of solutions:
 #<stream>
 ```
 
-Most *good* crytarithmetic problems usually have a single solution. 
+Most *good* crytarithmetic problems usually have a unique solution. 
 
 To get a solution just use the standard `racket/stream` functions: 
 
