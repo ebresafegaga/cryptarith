@@ -19,10 +19,10 @@
 
 ; : (Immutable-HashTable Letter Integer) -> Letters -> Integer
 (define (letters->integer m l)
-  (define nums (map (curry hash-ref m) l))
-  (for/fold ([s 0])
-            ([a nums])
-    (+ (* s 10) a)))
+  (let ([nums (map (curry hash-ref m) l)])
+    (for/fold ([s 0])
+              ([a nums])
+      (+ (* s 10) a))))
 
 
 ; correct: (Immutable-HashTable Letter Integer) ->
