@@ -49,7 +49,7 @@ And sure enough, you'd get:
 ```
 If a particular crytparithmetic problem doesn't have a solution and you 
 try to invoke `stream-first` on its stream you'd get an exception saying 
-you it expected a non-empty stream:
+it expected a non-empty stream:
 
 ```racket
 stream-first: contract violation
@@ -58,7 +58,7 @@ stream-first: contract violation
 ```
 
 Note that it might take a while to get a solution because it searches
-for a solution using a search tree. It returns immediately it finds a 
+for a solution using a very search tree. It returns immediately it finds a 
 solution, so you don't search the whole tree (that's why it uses a `stream`).
 So it depends of how far the solution is in the search tree.
 
