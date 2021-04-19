@@ -58,7 +58,7 @@ stream-first: contract violation
 ```
 
 Note that it might take a while to get a solution because it searches
-for a solution using a very search tree. It returns immediately it finds a 
+for a solution using a very large search tree. It returns immediately it finds a 
 solution, so you don't search the whole tree (that's why it uses a `stream`).
 So it depends of how far the solution is in the search tree.
 
