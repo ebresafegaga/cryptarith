@@ -118,3 +118,6 @@ Here's `solve`:
                               (h `(,(car a) ,(car b) ,(car s)) g)))
        g)))
 ```
+
+You can see the `crypt.rkt` file for more details. It is fairly 
+documented well.
