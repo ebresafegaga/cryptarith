@@ -119,5 +119,5 @@ Here's `solve`:
        g)))
 ```
 
-You can see the `crypt.rkt` file for more details. It is fairly 
+You can see the [`crypt.rkt`](https://github.com/ebresafegaga/cryptarith/blob/main/crypt.rkt) file for more details. It is fairly 
 documented well.
