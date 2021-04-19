@@ -22,7 +22,7 @@
   (let ([nums (map (curry hash-ref m) l)])
     (for/fold ([s 0])
               ([a nums])
-      (+ (* s 10) a))))
+      ((* s 10) . + . a))))
 
 
 ; correct: (Immutable-HashTable Letter Integer) ->
@@ -35,8 +35,7 @@
          [a-value (l->i a)]
          [b-value (l->i b)]
          [s-value (l->i s)])
-    (= (+ a-value b-value)
-       s-value)))
+    ((+ a-value b-value) . = . s-value)))
 
 ;two solutions to avoid using 0 for the first letter:
 ; - tell `generate` which letter is the first
