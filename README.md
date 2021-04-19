@@ -74,10 +74,10 @@ In short:
 ```haskell 
 solve = filter corect . generate 
 ```
-A solution is a *finite* mapping from alphabets to numbers.
+A solution is a finite mapping from letters to numbers.
 
 `generate` is a function that lazily generates all posible combinations 
-of a solution. It uses an implicit DFS (depth first search) implemented with natural resursion. 
+of a solution. It uses an implicit DFS (depth first search) implemented with natural recursion. 
 
 `correct` takes a solution and 3 lists of letters (top row, bottom row, and result.)
 It then checks to see if the top row and the bottom row *add up* to the result, using 
