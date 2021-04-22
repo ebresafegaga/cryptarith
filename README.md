@@ -48,7 +48,7 @@ And sure enough, you'd get:
   (S . 9))
 ```
 If a particular crytparithmetic problem doesn't have a solution and you 
-try to invoke `stream-first` on its stream you'd get an exception saying 
+try to apply `stream-first` to the stream you'd get an exception saying 
 it expected a non-empty stream:
 
 ```racket
@@ -62,10 +62,10 @@ for a solution using a very large search tree. It returns immediately it finds a
 solution, so you don't search the whole tree (that's why it uses a `stream`).
 So it depends of how far the solution is in the search tree.
 
-If it so happens that the cryptarithmetic problem has more than 
-one solution, and you want to get all of them you can use the function 
-`stream->list` from `racket/stream` to get all of them. Note that this might
-take a while, as it performs an exaustive search.
+If it so happens that a particular cryptarithmetic problem has more than 
+one solution, and you want to get all of them, you can use the function 
+`stream->list` from `racket/stream` to do that. Note that this might
+take a while, as it performs an exhaustive search.
 
 ### How does this work? 
 
