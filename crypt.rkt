@@ -19,10 +19,10 @@
 
 ; : (Immutable-HashTable Letter Integer) -> Letters -> Integer
 (define (letters->integer m l)
-  (let ([nums (map (curry hash-ref m) l)])
-    (for/fold ([s 0])
-              ([a nums])
-      ((* s 10) . + . a))))
+  (for*/fold ([s 0])
+             ([a (in-list (map (curry hash-ref m) l))])
+    (+ a (* s 10))))
+
 
 
 ; correct: (Immutable-HashTable Letter Integer) ->
@@ -35,7 +35,7 @@
          [a-value (l->i a)]
          [b-value (l->i b)]
          [s-value (l->i s)])
-    ((+ a-value b-value) . = . s-value)))
+    (eq? (+ a-value b-value) s-value)))
 
 ;two solutions to avoid using 0 for the first letter:
 ; - tell `generate` which letter is the first
@@ -48,23 +48,23 @@
     ['() (stream empty)]
     [`(,l . ,letters)
      (for*/stream ([i (in-list rng)]
-                   [result (generate (remove i rng)
-                                     (remove l letters))])
-       (cons `(,l . ,i) result))]))
+                   [result (in-stream (generate (remove i rng) letters))])
+       (cons (cons l i) result))]))
 
 (define (solve a b s)
-  (let ([letters (set->list (apply set (append a b s)))])
-    (for/stream ([g (generate (range 0 10) letters)]
-                  #:when (and (correct (make-hash g) a b s)
-                              (h `(,(car a) ,(car b) ,(car s)) g)))
-       g)))
+  (for*/stream ([letters (in-value (set->list (apply set (append a b s))))]
+                [solution (in-stream (generate (range 0 10) letters))]
+                #:when (and (correct (make-immutable-hash solution) a b s)
+                            (h (map first (list a b s)) solution)))
+    solution))
 
 (define (p xs x)
  (match (assoc x xs)
    [(cons _ 0) #f]
    [_ #t]))
 
-(define (h letters m) (andmap (curry p m) letters))
+(define (h letters m)
+  (andmap (curry p m) letters))
 
 (module+ tests
   (require rackunit)
