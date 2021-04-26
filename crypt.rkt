@@ -55,7 +55,8 @@
   (for*/stream ([letters (in-value (set->list (apply set (append a b s))))]
                 [solution (in-stream (generate (range 0 10) letters))]
                 #:when (and (correct (make-immutable-hash solution) a b s)
-                            (h (map first (list a b s)) solution)))
+                            (h (map first (list a b s))
+                               solution)))
     solution))
 
 (define (p xs x)
