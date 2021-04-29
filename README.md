@@ -100,9 +100,9 @@ Here's `generate`:
   (match letters
     ['() (stream empty)]
     [(cons letter letters)
-     (for*/stream ([index (in-list rng)]
-                   [result (in-stream (generate (remove index rng)
-                                                letters))])
+     (for*/stream ([index rng]
+                   [result (generate (remove index rng)
+                                     letters)])
        (cons (cons letter index)
              result))]))
 ```
@@ -111,7 +111,7 @@ Here's `solve`:
 ```racket
 (define (solve top bot sol)
   (for*/stream ([letters (in-value (set->list (apply set (append top bot sol))))]
-                [solution (in-stream (generate (range 0 10) letters))]
+                [solution (generate (range 0 10) letters)]
                 #:when (and (correct (make-immutable-hash solution) top bot sol)
                             (for/and ([l (for/list ([e (list top bot sol)])
                                            (first e))])
