@@ -18,24 +18,21 @@
 ; (define (subst m l) (map (λ (x) (hash-ref m x 0)) l))
 
 ; : (Immutable-HashTable Letter Integer) -> Letters -> Integer
-(define (letters->integer m l)
-  (for*/fold ([s 0])
-             ([a (in-list (map (curry hash-ref m) l))])
-    (+ a (* s 10))))
-
-
+(define (letters->integer table letters)
+  (for/fold ([result 0])
+            ([digit (for/list ([l letters])
+                      (hash-ref table l))])
+    (+ digit (* result 10))))
 
 ; correct: (Immutable-HashTable Letter Integer) ->
 ; Letters -> Letters -> Letters -> Boolean
 
 ; correct takes a solutions, 2 input letters, and a solution
 ; and verifies if then *add* up to the solution 
-(define (correct m a b s)
-  (let* ([l->i (curry letters->integer m)]
-         [a-value (l->i a)]
-         [b-value (l->i b)]
-         [s-value (l->i s)])
-    (eq? (+ a-value b-value) s-value)))
+(define (correct table top bot sol)
+  (define l->i (curry letters->integer table))
+  (eqv? (+ (l->i top) (l->i bot))
+        (l->i sol)))
 
 ;two solutions to avoid using 0 for the first letter:
 ; - tell `generate` which letter is the first
@@ -46,26 +43,21 @@
 (define (generate rng letters)
   (match letters
     ['() (stream empty)]
-    [`(,l . ,letters)
-     (for*/stream ([i (in-list rng)]
-                   [result (in-stream (generate (remove i rng) letters))])
-       (cons (cons l i) result))]))
+    [`(,letter . ,letters)
+     (for*/stream ([index (in-list rng)]
+                   [result (in-stream (generate (remove index rng)
+                                                letters))])
+       (cons (cons letter index)
+             result))]))
 
-(define (solve a b s)
-  (for*/stream ([letters (in-value (set->list (apply set (append a b s))))]
+(define (solve top bot sol)
+  (for*/stream ([letters (in-value (set->list (apply set (append top bot sol))))]
                 [solution (in-stream (generate (range 0 10) letters))]
-                #:when (and (correct (make-immutable-hash solution) a b s)
-                            (h (map first (list a b s))
-                               solution)))
+                #:when (and (correct (make-immutable-hash solution) top bot sol)
+                            (for/and ([l (for/list ([e (list top bot sol)])
+                                           (first e))])
+                              (not (eqv? (dict-ref solution l) 0)))))
     solution))
-
-(define (p xs x)
- (match (assoc x xs)
-   [(cons _ 0) #f]
-   [_ #t]))
-
-(define (h letters m)
-  (andmap (curry p m) letters))
 
 (module+ tests
   (require rackunit)
