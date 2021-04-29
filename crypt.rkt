@@ -1,10 +1,7 @@
 #lang racket/base
 
-(require racket/match
-         racket/stream
-         racket/list
-         racket/set
-         racket/dict)
+(require racket/require
+         (multi-in racket (match list dict set stream)))
 
 ;    S E N D
 ; +  M O R E
