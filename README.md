@@ -69,7 +69,7 @@ take a while, as it performs an exhaustive search.
 
 ### How does this work? 
 
-In short:
+In short (using Haskell):
 
 ```haskell 
 solve = filter corect . generate 
@@ -88,13 +88,10 @@ the given solution.
 Here's `correct`:
 
 ```racket
-(define (correct m a b s)
-  (define l->i (curry letters->integer m))
-  (let ([a-value (l->i a)]
-        [b-value (l->i b)]
-        [s-value (l->i s)])
-    (= (+ a-value b-value)
-       s-value)))
+(define (correct table top bot sol)
+  (define (l->i letters) (letters->integer table letters))
+  (eqv? (+ (l->i top) (l->i bot))
+        (l->i sol)))
 ```
 Here's `generate`: 
 
@@ -102,21 +99,24 @@ Here's `generate`:
 (define (generate rng letters)
   (match letters
     ['() (stream empty)]
-    [`(,l . ,letters)
-     (for*/stream ([i (in-list rng)]
-                   [result (generate (remove i rng)
-                                     (remove l letters))])
-       (cons `(,l . ,i) result))]))
+    [(cons letter letters)
+     (for*/stream ([index (in-list rng)]
+                   [result (in-stream (generate (remove index rng)
+                                                letters))])
+       (cons (cons letter index)
+             result))]))
 ```
 Here's `solve`: 
 
 ```racket
-(define (solve a b s)
-  (let ([letters (set->list (apply set (append a b s)))])
-    (for/stream ([g (generate (range 0 10) letters)]
-                  #:when (and (correct (make-hash g) a b s)
-                              (h `(,(car a) ,(car b) ,(car s)) g)))
-       g)))
+(define (solve top bot sol)
+  (for*/stream ([letters (in-value (set->list (apply set (append top bot sol))))]
+                [solution (in-stream (generate (range 0 10) letters))]
+                #:when (and (correct (make-immutable-hash solution) top bot sol)
+                            (for/and ([l (for/list ([e (list top bot sol)])
+                                           (first e))])
+                              (not (eqv? (dict-ref solution l) 0)))))
+    solution))
 ```
 
 You can see the [`crypt.rkt`](https://github.com/ebresafegaga/cryptarith/blob/main/crypt.rkt) file for more details. It's 
