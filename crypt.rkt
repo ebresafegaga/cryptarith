@@ -1,7 +1,6 @@
 #lang racket/base
 
-(require racket/function
-         racket/match
+(require racket/match
          racket/stream
          racket/list
          racket/set
@@ -37,7 +36,7 @@
 ; correct takes a solutions, 2 input letters, and a solution
 ; and verifies if then *add* up to the solution 
 (define (correct table top bot sol)
-  (define l->i (curry letters->integer table))
+  (define (l->i letters) (letters->integer table letters))
   (eqv? (+ (l->i top) (l->i bot))
         (l->i sol)))
 
