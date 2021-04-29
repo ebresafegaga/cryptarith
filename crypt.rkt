@@ -46,7 +46,7 @@
 (define (generate rng letters)
   (match letters
     ['() (stream empty)]
-    [`(,letter . ,letters)
+    [(cons letter letters)
      (for*/stream ([index (in-list rng)]
                    [result (in-stream (generate (remove index rng)
                                                 letters))])
