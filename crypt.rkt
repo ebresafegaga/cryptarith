@@ -1,4 +1,11 @@
-#lang racket
+#lang racket/base
+
+(require racket/function
+         racket/match
+         racket/stream
+         racket/list
+         racket/set
+         racket/dict)
 
 ;    S E N D
 ; +  M O R E
@@ -58,14 +65,3 @@
                                            (first e))])
                               (not (eqv? (dict-ref solution l) 0)))))
     solution))
-
-(module+ tests
-  (require rackunit)
-  
-  (test-case
-   "Simple test"
-   (check-eq? (list 1) (list 5)))
-
-  (test-case
-   "Another test case"))
-
